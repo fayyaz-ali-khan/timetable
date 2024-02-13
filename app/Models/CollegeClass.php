@@ -18,4 +18,11 @@ class CollegeClass extends Model
             'size' => 'required|integer'
         ];
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'courses_classes', 'class_id', 'course_id')
+            ->withPivot(['meetings', 'academic_period_id']);
+    }
+
 }

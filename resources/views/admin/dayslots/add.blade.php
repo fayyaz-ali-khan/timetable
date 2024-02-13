@@ -27,9 +27,7 @@
                             <label class="col-sm-2 col-form-label" for="start_tim">Course</label>
                             <div class="col-sm-10">
                                 <select name="course_id" id="start_tim" class="form-select">
-                                    @foreach ($courses as $course)
-                                        <option value="{{ $course->id }}">{{ $course->name }}</option>
-                                    @endforeach
+
 
                                 </select>
                             </div>
@@ -38,9 +36,7 @@
                             <label class="col-sm-2 col-form-label" for="start_t">Academic Periods</label>
                             <div class="col-sm-10">
                                 <select name="academic_period_id" id="start_t" class="form-select">
-                                    @foreach ($academic_periods as $period)
-                                        <option value="{{ $period->id }}">{{ $period->name }}</option>
-                                    @endforeach
+
 
                                 </select>
                             </div>
@@ -49,9 +45,6 @@
                             <label class="col-sm-2 col-form-label" for="basic-default-name">Avilable Rooms</label>
                             <div class="col-sm-10">
                                 <select name="room_id" id="start_time" class="form-select">
-                                    @foreach ($rooms as $room)
-                                        <option value="{{ $room->id }}">{{ $room->name }}</option>
-                                    @endforeach
 
 
                                 </select>

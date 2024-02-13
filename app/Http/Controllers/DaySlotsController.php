@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Timeslot;
 use Illuminate\Http\Request;
 
-class TimeslotController extends Controller
+class DaySlotsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    { 
-        $timeslot = Timeslot::all();
-        return view('admin.periods.index',compact('timeslot'));
+    {
+        return 'days slots';
     }
 
     /**
@@ -21,7 +19,7 @@ class TimeslotController extends Controller
      */
     public function create()
     {
-        return view('admin.periods.add');
+        return view('admin.dayslots.add');
     }
 
     /**
@@ -29,26 +27,7 @@ class TimeslotController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'rank' => 'required|integer',
-        ]);
-
-        // Concatenate start and end times
-        $time = $request->start_time . '-' . $request->end_time;
-
-        // Create a new TimeSlot instance
-        $timeslot = new Timeslot();
-        $timeslot->time = $time;
-        $timeslot->rank = $request->rank;
-        // Add other fields as needed
-
-        // Save the TimeSlot instance
-        $timeslot->save();
-        session()->flash('message', 'Time Period store  successfully');
-        // Redirect back or wherever you want
-        return redirect()->route('timeslots.index');
+        //
     }
 
     /**

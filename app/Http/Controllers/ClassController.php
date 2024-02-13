@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicPeriod;
+use App\Models\ClassCourse;
 use App\Models\CollegeClass;
 use Illuminate\Http\Request;
+use App\Models\Course;
+use App\Models\UnavailableRoom;
+
+use App\Models\Room;
 
 class ClassController extends Controller
 {
@@ -11,19 +17,28 @@ class ClassController extends Controller
     {
         $classes = CollegeClass::all();
         // Your dashboard logic goes here
-        return view('admin.classes.index',compact('classes'));
+        return view('admin.classes.index', compact('classes'));
     }
 
     public function add()
     {
-        
+
+        $rooms = '';
         // Your dashboard logic goes here
-        return view('admin.classes.add');
+        $courses = Course::all();
+        $academic_periods = AcademicPeriod::all();
+        $unavalible_rooms = UnavailableRoom::select('room_id')->get();
+        if ($unavalible_rooms->count() > 0) {
+            $rooms = Room::whereNotIn('id', $unavalible_rooms)->get();
+        } else {
+            $rooms = Room::all();
+        }
+        return view('admin.classes.add', compact('courses', 'academic_periods', 'rooms'));
     }
 
-    public function store(Request  $request)
+    public function store(Request $request)
     {
-
+        // dd($request->room_id);
         // Validate the request data
         $request->validate(CollegeClass::rules());
         // Create the class
@@ -31,6 +46,9 @@ class ClassController extends Controller
             'name' => $request->input('name'),
             'size' => $request->input('size')
         ]);
+
+        ClassCourse::create(['class_id' => $class->id, 'academic_period_id' => $request->academic_period_id, 'course_id' => $request->course_id, 'meetings' => '11']);
+        UnavailableRoom::create(['class_id' => $class->id, 'room_id' => $request->room_id]);
 
         // Flash a success message to the session
         session()->flash('message', 'Class created successfully');
@@ -43,10 +61,10 @@ class ClassController extends Controller
     {
         $classes = CollegeClass::findOrFail($id);
         // Your dashboard logic goes here
-        return view('admin.classes.edit',compact('classes'));
+        return view('admin.classes.edit', compact('classes'));
     }
 
-    public function update(Request  $request, $id)
+    public function update(Request $request, $id)
     {
 
         $request->validate([
@@ -71,7 +89,7 @@ class ClassController extends Controller
     }
 
     public function destroy($id)
-    { 
+    {
         // Find the class with the given ID
         $class = CollegeClass::findOrFail($id);
 

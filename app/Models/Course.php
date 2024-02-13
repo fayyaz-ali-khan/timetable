@@ -18,4 +18,8 @@ class Course extends Model
             'name' => 'required|unique:courses'
         ];
     }
+    public function classes()
+    {
+        return $this->belongsToMany(CollegeClass::class, 'courses_classes', 'course_id', 'class_id');
+    }
 }
