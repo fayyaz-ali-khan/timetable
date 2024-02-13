@@ -20,10 +20,11 @@
                   {{ session('message') }}
               </div>
           @endif
+          @foreach($timeslot as $slot)
           <tr>
-            <td>1</td>
-            <td>1st Semester</td>
-            <td>1</td>
+            <td>{{$slot->id}}</td>
+            <td>{{$slot->time}}</td>
+            <td>{{$slot->rank}}</td>
             <td>
               <div class="dropdown">
                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
@@ -35,6 +36,7 @@
               </div>
             </td>
           </tr>
+          @endforeach
           
         </tbody>
       </table>

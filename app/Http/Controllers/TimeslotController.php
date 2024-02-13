@@ -11,8 +11,9 @@ class TimeslotController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        return view('admin.periods.index');
+    { 
+        $timeslot = Timeslot::all();
+        return view('admin.periods.index',compact('timeslot'));
     }
 
     /**
