@@ -11,9 +11,9 @@ class TimeslotController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    { 
+    {
         $timeslot = Timeslot::all();
-        return view('admin.periods.index',compact('timeslot'));
+        return view('admin.periods.index', compact('timeslot'));
     }
 
     /**
@@ -59,12 +59,19 @@ class TimeslotController extends Controller
         //
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $timeslot = Timeslot::findOrFail($id);
+        $timeRange = explode('-', $timeslot->time);
+
+        $start_time = trim($timeRange[0]);
+        $end_time = trim($timeRange[1]);
+
+        return view('admin.periods.edit', compact('timeslot', 'start_time', 'end_time'));
     }
 
     /**
@@ -72,14 +79,49 @@ class TimeslotController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate the incoming request data
+        $request->validate([
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'rank' => 'required|integer',
+        ]);
+
+        // Retrieve the Timeslot instance
+        $timeslot = Timeslot::findOrFail($id);
+
+        // Concatenate start and end times
+        $time = $request->start_time . '-' . $request->end_time;
+
+        // Update the Timeslot instance with the new data
+        $timeslot->time = $time;
+        $timeslot->rank = $request->rank;
+        // Update other fields as needed
+
+        // Save the updated Timeslot instance
+        $timeslot->save();
+
+        // Flash a success message
+        session()->flash('message', 'Time Period updated successfully');
+
+        // Redirect back or wherever you want
+        return redirect()->route('timeslots.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy($id)
+    { 
+        // Find the time slot by ID
+        $timeslot = Timeslot::findOrFail($id);
+
+        // Delete the time slot
+        $timeslot->delete();
+
+        // Flash a success message
+        session()->flash('message', 'Time Period deleted successfully');
+
+        // Redirect back or wherever you want
+        return redirect()->route('timeslots.index');
     }
 }
